@@ -72,28 +72,92 @@ public class C_HeapMax {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение.
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
-        private List<Long> heap = new ArrayList<>();
-
-        int siftDown(int i) { //просеивание вверх
-
-            return i;
-        }
-
-        int siftUp(int i) { //просеивание вниз
-
-            return i;
-        }
-
-        void insert(Long value) { //вставка
-        }
-
-        Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-
-            return result;
-        }
+//        private List<Long> heap = new ArrayList<>();
+//
+//        int siftDown(int i) { //просеивание вверх
+//
+//            return i;
+//        }
+//
+//        int siftUp(int i) { //просеивание вниз
+//
+//            return i;
+//        }
+//
+//        void insert(Long value) { //вставка
+//        }
+//
+//        Long extractMax() { //извлечение и удаление максимума
+//            Long result = null;
+//
+//            return result;
+//        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-    }
+            private List<Long> heap = new ArrayList<>();
+
+            // Просеивание вниз (нужно для extractMax)
+            int siftDown(int i) {
+                while (2 * i + 1 < heap.size()) {
+                    int left = 2 * i + 1;
+                    int right = 2 * i + 2;
+                    int j = left; // предполагаем, что меняем с левым
+
+                    // Если есть правый ребенок и он больше левого
+                    if (right < heap.size() && heap.get(right) > heap.get(left)) {
+                        j = right;
+                    }
+
+                    // Если текущий элемент уже больше или равен самому большому ребенку - стоп
+                    if (heap.get(i) >= heap.get(j)) {
+                        break;
+                    }
+
+                    swap(i, j);
+                    i = j;
+                }
+                return i;
+            }
+
+            // Просеивание вверх (нужно для insert)
+            int siftUp(int i) {
+                while (i > 0) {
+                    int parent = (i - 1) / 2;
+                    if (heap.get(i) <= heap.get(parent)) {
+                        break;
+                    }
+                    swap(i, parent);
+                    i = parent;
+                }
+                return i;
+            }
+
+            void insert(Long value) {
+                heap.add(value); // добавляем в конец
+                siftUp(heap.size() - 1); // просеиваем вверх
+            }
+
+            Long extractMax() {
+                if (heap.isEmpty()) return null;
+
+                Long result = heap.get(0); // максимум всегда в корне
+                Long lastElement = heap.remove(heap.size() - 1); // удаляем последний
+
+                if (!heap.isEmpty()) {
+                    heap.set(0, lastElement); // ставим последний на место корня
+                    siftDown(0); // просеиваем вниз
+                }
+
+                System.out.println(result); // вывод для задачи
+                return result;
+            }
+
+            private void swap(int i, int j) {
+                Long temp = heap.get(i);
+                heap.set(i, heap.get(j));
+                heap.set(j, temp);
+            }
+        }
+
 
     // РЕМАРКА. Это задание исключительно учебное.
     // Свои собственные кучи нужны довольно редко.

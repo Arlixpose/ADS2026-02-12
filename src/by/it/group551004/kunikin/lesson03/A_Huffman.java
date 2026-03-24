@@ -57,20 +57,20 @@ public class A_Huffman {
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-    String encode(InputStream inputStream) throws FileNotFoundException {
+//    String encode(InputStream inputStream) throws FileNotFoundException {
         //прочитаем строку для кодирования из тестового файла
-        Scanner scanner = new Scanner(inputStream);
-        String s = scanner.next();
+//        Scanner scanner = new Scanner(inputStream);
+//        String s = scanner.next();
 
         //все комментарии от тестового решения были оставлены т.к. это задание A.
         //если они вам мешают их можно удалить
 
-        Map<Character, Integer> count = new HashMap<>();
+//        Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
         //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
 
         //2. перенесем все символы в приоритетную очередь в виде листьев
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+//        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
 
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
@@ -79,12 +79,57 @@ public class A_Huffman {
 
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
-        StringBuilder sb = new StringBuilder();
+//        StringBuilder sb = new StringBuilder();
         //.....
 
+//        return sb.toString();
+        //01001100100111
+        //01001100100111
+//    }
+
+    String encode(InputStream inputStream) throws FileNotFoundException {
+        Scanner scanner = new Scanner(inputStream);
+        String s = scanner.next();
+
+        // 1. Calculate frequencies
+        Map<Character, Integer> count = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            count.put(c, count.getOrDefault(c, 0) + 1);
+        }
+
+        // 2. Fill PriorityQueue with LeafNodes
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+        for (Map.Entry<Character, Integer> entry : count.entrySet()) {
+            priorityQueue.add(new LeafNode(entry.getValue(), entry.getKey()));
+        }
+
+        // 3. Build the Huffman Tree
+        Node root = null;
+        if (priorityQueue.size() == 1) {
+            // Special case: only one unique character
+            Node leaf = priorityQueue.poll();
+            leaf.fillCodes("0");
+            root = leaf;
+        } else {
+            while (priorityQueue.size() > 1) {
+                Node left = priorityQueue.poll();
+                Node right = priorityQueue.poll();
+                InternalNode parent = new InternalNode(left, right);
+                priorityQueue.add(parent);
+            }
+            root = priorityQueue.poll();
+            if (root != null) {
+                root.fillCodes("");
+            }
+        }
+
+        // 4. Build the resulting binary string
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            sb.append(codes.get(c));
+        }
+
         return sb.toString();
-        //01001100100111
-        //01001100100111
     }
 
     //Изучите классы Node InternalNode LeafNode

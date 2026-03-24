@@ -2,6 +2,8 @@ package by.it.group551004.kunikin.lesson03;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -53,12 +55,38 @@ public class B_Huffman {
         StringBuilder result = new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(inputStream);
-        Integer count = scanner.nextInt();
-        Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
+// Read k (number of unique letters) and l (total length of encoded string)
+        int k = scanner.nextInt();
+        int l = scanner.nextInt();
+        scanner.nextLine(); // Consume the leftover newline
 
+        // 1. Map codes back to characters
+        Map<String, Character> codeMap = new HashMap<>();
+        for (int i = 0; i < k; i++) {
+            String line = scanner.nextLine();
+            // Format is "letter: code"
+            String[] parts = line.split(": ");
+            char letter = parts[0].charAt(0);
+            String code = parts[1];
+            codeMap.put(code, letter);
+        }
 
+        // 2. Read the encoded bit string
+        String encodedString = scanner.next();
+
+        // 3. Decode by sliding through the string
+        StringBuilder currentCode = new StringBuilder();
+        for (int i = 0; i < encodedString.length(); i++) {
+            currentCode.append(encodedString.charAt(i));
+
+            // Check if the current bit sequence matches a known character
+            if (codeMap.containsKey(currentCode.toString())) {
+                result.append(codeMap.get(currentCode.toString()));
+                currentCode.setLength(0); // Reset for the next character
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
