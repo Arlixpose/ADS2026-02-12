@@ -91,22 +91,18 @@ public class A_Huffman {
         Scanner scanner = new Scanner(inputStream);
         String s = scanner.next();
 
-        // 1. Calculate frequencies
         Map<Character, Integer> count = new HashMap<>();
         for (char c : s.toCharArray()) {
             count.put(c, count.getOrDefault(c, 0) + 1);
         }
 
-        // 2. Fill PriorityQueue with LeafNodes
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
         for (Map.Entry<Character, Integer> entry : count.entrySet()) {
             priorityQueue.add(new LeafNode(entry.getValue(), entry.getKey()));
         }
 
-        // 3. Build the Huffman Tree
         Node root = null;
         if (priorityQueue.size() == 1) {
-            // Special case: only one unique character
             Node leaf = priorityQueue.poll();
             leaf.fillCodes("0");
             root = leaf;
@@ -123,7 +119,6 @@ public class A_Huffman {
             }
         }
 
-        // 4. Build the resulting binary string
         StringBuilder sb = new StringBuilder();
         for (char c : s.toCharArray()) {
             sb.append(codes.get(c));

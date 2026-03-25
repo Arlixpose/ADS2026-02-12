@@ -95,19 +95,16 @@ public class C_HeapMax {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
             private List<Long> heap = new ArrayList<>();
 
-            // Просеивание вниз (нужно для extractMax)
             int siftDown(int i) {
                 while (2 * i + 1 < heap.size()) {
                     int left = 2 * i + 1;
                     int right = 2 * i + 2;
-                    int j = left; // предполагаем, что меняем с левым
+                    int j = left;
 
-                    // Если есть правый ребенок и он больше левого
                     if (right < heap.size() && heap.get(right) > heap.get(left)) {
                         j = right;
                     }
 
-                    // Если текущий элемент уже больше или равен самому большому ребенку - стоп
                     if (heap.get(i) >= heap.get(j)) {
                         break;
                     }
@@ -118,7 +115,6 @@ public class C_HeapMax {
                 return i;
             }
 
-            // Просеивание вверх (нужно для insert)
             int siftUp(int i) {
                 while (i > 0) {
                     int parent = (i - 1) / 2;
@@ -132,22 +128,22 @@ public class C_HeapMax {
             }
 
             void insert(Long value) {
-                heap.add(value); // добавляем в конец
-                siftUp(heap.size() - 1); // просеиваем вверх
+                heap.add(value);
+                siftUp(heap.size() - 1);
             }
 
             Long extractMax() {
                 if (heap.isEmpty()) return null;
 
-                Long result = heap.get(0); // максимум всегда в корне
-                Long lastElement = heap.remove(heap.size() - 1); // удаляем последний
+                Long result = heap.get(0);
+                Long lastElement = heap.remove(heap.size() - 1);
 
                 if (!heap.isEmpty()) {
-                    heap.set(0, lastElement); // ставим последний на место корня
-                    siftDown(0); // просеиваем вниз
+                    heap.set(0, lastElement);
+                    siftDown(0);
                 }
 
-                System.out.println(result); // вывод для задачи
+                System.out.println(result);
                 return result;
             }
 
