@@ -29,38 +29,47 @@ public class A_BinaryFind {
     public static void main(String[] args) throws FileNotFoundException {
         InputStream stream = A_BinaryFind.class.getResourceAsStream("dataA.txt");
         A_BinaryFind instance = new A_BinaryFind();
-        //long startTime = System.currentTimeMillis();
         int[] result = instance.findIndex(stream);
-        //long finishTime = System.currentTimeMillis();
         for (int index : result) {
             System.out.print(index + " ");
         }
     }
 
     public int[] findIndex(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-        //размер отсортированного массива
+        if (!scanner.hasNextInt()) return new int[0];
         int n = scanner.nextInt();
-        //сам отсортированный массива
         int[] a = new int[n];
-        for (int i = 1; i <= n; i++) {
-            a[i - 1] = scanner.nextInt();
+        for (int i = 0; i < n; i++) {
+            a[i] = scanner.nextInt();
         }
 
-        //размер массива индексов
+        if (!scanner.hasNextInt()) return new int[0];
         int k = scanner.nextInt();
         int[] result = new int[k];
+
         for (int i = 0; i < k; i++) {
-            int value = scanner.nextInt();
-            //тут реализуйте бинарный поиск индекса
+            int target = scanner.nextInt();
+            int left = 0;
+            int right = n - 1;
+            int foundIndex = -1;
 
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
 
-            result[i] = 0;
+                if (a[mid] == target) {
+                    foundIndex = mid + 1;
+                    break;
+                } else if (a[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            result[i] = foundIndex;
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+
         return result;
     }
 

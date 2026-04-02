@@ -2,6 +2,7 @@ package by.it.group551004.kunikin.lesson04;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -44,21 +45,48 @@ public class C_GetInversions {
     }
 
     int calc(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
-        //размер массива
+        if (!scanner.hasNextInt()) return 0;
         int n = scanner.nextInt();
-        //сам массив
         int[] a = new int[n];
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
+        return mergeSortAndCount(a, 0, n - 1);
+    }
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+    private int mergeSortAndCount(int[] arr, int l, int r) {
+        int count = 0;
+        if (l < r) {
+            int m = l + (r - l) / 2;
+
+            count += mergeSortAndCount(arr, l, m);
+            count += mergeSortAndCount(arr, m + 1, r);
+
+            count += mergeAndCount(arr, l, m, r);
+        }
+        return count;
+    }
+
+    private int mergeAndCount(int[] arr, int l, int m, int r) {
+        int[] left = Arrays.copyOfRange(arr, l, m + 1);
+        int[] right = Arrays.copyOfRange(arr, m + 1, r + 1);
+
+        int i = 0, j = 0, k = l, swaps = 0;
+
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                arr[k++] = left[i++];
+            } else {
+                arr[k++] = right[j++];
+
+                swaps += (m + 1) - (l + i);
+            }
+        }
+        while (i < left.length) arr[k++] = left[i++];
+        while (j < right.length) arr[k++] = right[j++];
+
+        return swaps;
     }
 }
