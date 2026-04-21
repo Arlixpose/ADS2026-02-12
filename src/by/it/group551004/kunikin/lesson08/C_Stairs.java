@@ -41,11 +41,33 @@ public class C_Stairs {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
+        int[] dp = new int[n];
 
+        if (n > 0) {
+            dp[0] = stairs[0];
 
+            if (n > 1) {
+                int sumFromStart = dp[0] + stairs[1];
+                int sumOnlySecond = stairs[1];
+                if (sumFromStart > sumOnlySecond) {
+                    dp[1] = sumFromStart;
+                } else {
+                    dp[1] = sumOnlySecond;
+                }
+            }
 
+            for (int i = 2; i < n; i++) {
+                int option1 = dp[i - 1];
+                int option2 = dp[i - 2];
+                if (option1 > option2) {
+                    dp[i] = stairs[i] + option1;
+                } else {
+                    dp[i] = stairs[i] + option2;
+                }
+            }
+        }
 
+        int result = (n > 0) ? dp[n - 1] : 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
